@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>あれから何日？</title>
+
+        <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap-vue.css"/>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+            <a class="navbar-brand" href="/">あれから何日？</a>
+        </nav>
+        <div class="container">
+            <div class="pt-3" id="tasks">
+                <task
+                    v-for="t in tasks"
+                    v-bind:key="t.id"
+                    v-bind:task="t"
+                    v-on:done-task="onDoneTask"
+                ></blog-post>
+            </div>
+        </div>
+    </body>
+
+    <script src="./assets/js/vue.js"></script>
+    <script src="./assets/js/bootstrap-vue.js"></script>
+    <script src="./assets/js/app.js"></script>
+</html>
