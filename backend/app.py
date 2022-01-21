@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-dynamodb = boto3.resource('dynamodb', endpoint_url=os.environ['AWS_ENDPOINT_URL'])
+dynamodb = boto3.resource('dynamodb', endpoint_url=os.getenv('AWS_ENDPOINT_URL'))
 table = dynamodb.Table('Tasks')
 
 app = FastAPI()
