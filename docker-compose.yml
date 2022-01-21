@@ -14,8 +14,6 @@ services:
       - dynamodb-local
     build: ./backend/
     container_name: api
-    ports:
-      - "8080:8080"
     environment:
       AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
       AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
