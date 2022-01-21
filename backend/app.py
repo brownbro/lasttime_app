@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 dynamodb = boto3.resource('dynamodb', endpoint_url=os.getenv('AWS_ENDPOINT_URL'))
-table = dynamodb.Table('Tasks')
+table = dynamodb.Table(os.getenv('TABLE_NAME'))
 
 app = FastAPI()
 
