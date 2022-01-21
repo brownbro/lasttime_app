@@ -31,4 +31,6 @@ services:
       - "8081:80"
     volumes:
       - "./frontend/src:/frontend"
+    environment:
+      BACKEND_URL:  'http://api:8080/'
 
