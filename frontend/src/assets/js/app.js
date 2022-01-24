@@ -28,7 +28,6 @@ const vm = new Vue({
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.task)
                 this.tasks.forEach(function(task){
                     if (task.id === data.task.id) {
                         task.days_from = 0
@@ -62,7 +61,6 @@ const vm = new Vue({
             .then(response => response.json())
             .then(data => {
                 const new_task = data.task
-                console.log(new_task)
                 new_task.days_from = 0
                 new_task.last_time = new_task.done_dates[0]
                 this.tasks.push(new_task)
