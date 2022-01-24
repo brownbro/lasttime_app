@@ -1,5 +1,4 @@
-const backend_url = "http://localhost:8080"
-// const backend_url = "https://him2hmq83z.ap-northeast-1.awsapprunner.com"
+const backend_url = '$BACKEND_URL'
 
 const vm = new Vue({
     el: '#tasks',
