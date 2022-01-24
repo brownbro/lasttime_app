@@ -27,7 +27,7 @@ services:
     build: ./frontend/
     container_name: frontend
     ports:
-      - "8081:80"
+      - "80:80"
     volumes:
       - "./frontend/src:/frontend"
     environment:
