@@ -38,6 +38,19 @@ const vm = new Vue({
                 })
             })
         },
+        onDelete: function(task_id) {
+            let url = new URL(backend_url + "/tasks/" + task_id)
+
+            fetch(url, {
+                method: "Delete",
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.tasks = this.tasks.filter((task) => {
+                    return task.id != task_id
+                })
+            })
+        },
         onCreate: function() {
             let url = new URL(backend_url + "/tasks")
             const requestOptions = {
@@ -66,7 +79,8 @@ Vue.component('task', {
         <div>
             <h4>{{ task.name }}</h4>
             <p>{{ task.days_from }}日 ({{ task.last_time }})
-            <button class="btn btn-primary" v-on:click="$emit('done-task', task.id)">更新</button> </p>
+            <button class="btn btn-primary" v-on:click="$emit('done-task', task.id)">更新</button>
+            <button class="btn btn-danger" v-on:click="$emit('delete', task.id)">削除</button> </p>
         </div>
         `,
 })
