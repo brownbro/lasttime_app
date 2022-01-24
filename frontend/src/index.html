@@ -20,6 +20,12 @@
                     v-bind:task="t"
                     v-on:done-task="onDoneTask"
                 ></task>
+                <div>
+                    <form>
+                        <input type="text" v-model="name"/>
+                        <button class="btn" type="button" @click="onCreate">追加</button>
+                    </form>
+                </div>
             </div>
         </div>
     </body>

@@ -5,7 +5,8 @@ const vm = new Vue({
     el: '#tasks',
     data: function() {
         return {
-            tasks: []
+            tasks: [],
+            name: "",
         }
     },
     async mounted() {
@@ -35,6 +36,25 @@ const vm = new Vue({
                         task.last_time = data.task.done_dates.slice(-1)[0]
                     }
                 })
+            })
+        },
+        onCreate: function() {
+            let url = new URL(backend_url + "/tasks")
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: this.name })
+            };
+
+            fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                const new_task = data.task
+                console.log(new_task)
+                new_task.days_from = 0
+                new_task.last_time = new_task.done_dates[0]
+                this.tasks.push(new_task)
+                this.name = ""
             })
         }
     }
