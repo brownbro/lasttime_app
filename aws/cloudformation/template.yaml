@@ -1,0 +1,30 @@
+Parameters:
+  BackendImageRepoName:
+    Type: String
+    Default: lasttime-app/backend:latest
+    Description: ECR repo Name and Tag
+  TableName:
+    Type: String
+    Default: lasttime-app
+    Description: DynamoDB Table Name
+
+Resources:
+  BackendAppRunnerService:
+    Type: AWS::AppRunner::Service
+    Properties: 
+      InstanceConfiguration: 
+        Cpu: 1024
+        InstanceRoleArn: arn:aws:iam::855581472221:role/lasttime-app-backend-role
+        Memory: 2048 
+      ServiceName: lasttime-app-backend-service
+      SourceConfiguration: 
+        AuthenticationConfiguration:
+          AccessRoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/service-role/AppRunnerECRAccessRole'
+        ImageRepository:
+          ImageConfiguration:
+            Port: 8080
+            RuntimeEnvironmentVariables:
+              - Name: TABLE_NAME
+                Value: !Ref TableName
+          ImageIdentifier: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${BackendImageRepoName}'
+          ImageRepositoryType: ECR
