@@ -66,7 +66,7 @@ Vue.component('task', {
         <div>
             <h4>{{ task.name }}</h4>
             <p>{{ task.days_from }}日 ({{ task.last_time }})
-            <button v-on:click="$emit('done-task', task.id)">更新</button> </p>
+            <button class="btn btn-primary" v-on:click="$emit('done-task', task.id)">更新</button> </p>
         </div>
         `,
 })
