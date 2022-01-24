@@ -18,7 +18,7 @@
                     v-for="t in tasks"
                     v-bind:key="t.id"
                     v-bind:task="t"
-                    v-on:done-task="onDoneTask"
+                    v-on:done="onDone"
                     v-on:delete="onDelete"
                 ></task>
                 <div>

@@ -21,7 +21,7 @@ const vm = new Vue({
         this.tasks = tasks
     },
     methods: {
-        onDoneTask: function(task_id) {
+        onDone: function(task_id) {
             let url = new URL(backend_url + "/tasks/" + task_id + "/done")
 
             fetch(url, {
@@ -79,7 +79,7 @@ Vue.component('task', {
         <div>
             <h4>{{ task.name }}</h4>
             <p>{{ task.days_from }}日 ({{ task.last_time }})
-            <button class="btn btn-primary" v-on:click="$emit('done-task', task.id)">更新</button>
+            <button class="btn btn-primary" v-on:click="$emit('done', task.id)">更新</button>
             <button class="btn btn-danger" v-on:click="$emit('delete', task.id)">削除</button> </p>
         </div>
         `,
