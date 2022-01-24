@@ -1,3 +1,6 @@
+const backend_url = "http://localhost:8080"
+// const backend_url = "https://him2hmq83z.ap-northeast-1.awsapprunner.com"
+
 const vm = new Vue({
     el: '#tasks',
     data: function() {
@@ -6,7 +9,7 @@ const vm = new Vue({
         }
     },
     async mounted() {
-        const data = await fetch("http://localhost:8081/api/tasks")
+        const data = await fetch(backend_url + "/tasks")
         const json = await data.json()
         const tasks = json.tasks
         const now = Date.now()
@@ -18,7 +21,7 @@ const vm = new Vue({
     },
     methods: {
         onDoneTask: function(task_id) {
-            let url = new URL("http://localhost:8081/api/tasks/" + task_id + "/done")
+            let url = new URL(backend_url + "/tasks/" + task_id + "/done")
 
             fetch(url, {
                 method: "PUT",

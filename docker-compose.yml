@@ -14,6 +14,8 @@ services:
       - dynamodb-local
     build: ./backend/
     container_name: api
+    ports:
+      - "8080:8080"
     environment:
       AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
       AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
@@ -30,7 +32,5 @@ services:
       - "80:80"
     volumes:
       - "./frontend/src:/frontend"
-    environment:
-      BACKEND_URL:  'http://api:8080/'
-    command: /bin/sh -c "envsubst '$$BACKEND_URL'< /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
 
