@@ -3,6 +3,10 @@ Parameters:
     Type: String
     Default: lasttime-app/backend:latest
     Description: ECR repo Name and Tag
+  BackendServicename:
+    Type: String
+    Default: lasttime-app-backend-service-1
+    Description: Name of Backend App Runner Service
   TableName:
     Type: String
     Default: lasttime-app
@@ -14,12 +18,12 @@ Resources:
     Properties: 
       InstanceConfiguration: 
         Cpu: 1024
-        InstanceRoleArn: arn:aws:iam::855581472221:role/lasttime-app-backend-role
+        InstanceRoleArn: !GetAtt BackendInstanceRole.Arn
         Memory: 2048 
-      ServiceName: lasttime-app-backend-service
+      ServiceName: !Ref BackendServicename
       SourceConfiguration: 
         AuthenticationConfiguration:
-          AccessRoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/service-role/AppRunnerECRAccessRole'
+          AccessRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
         ImageRepository:
           ImageConfiguration:
             Port: 8080
@@ -28,3 +32,37 @@ Resources:
                 Value: !Ref TableName
           ImageIdentifier: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${BackendImageRepoName}'
           ImageRepositoryType: ECR
+
+  BackendInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - tasks.apprunner.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+
+  AppRunnerECRAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - build.apprunner.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess
+
+Outputs:
+  BackendAppRunnerServiceUrl:
+    Value: !GetAtt BackendAppRunnerService.ServiceUrl
