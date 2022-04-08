@@ -1,2 +1,4 @@
 docker/dynamodb/*
 .env
+
+frontend/build

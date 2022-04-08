@@ -3,18 +3,10 @@ Parameters:
     Type: String
     Default: lasttime-app/backend:latest
     Description: Backend Image repository Name and Tag
-  FrontendImageRepoName:
-    Type: String
-    Default: lasttime-app/frontend:latest
-    Description: Frontend Image repository Name and Tag
   BackendServiceName:
     Type: String
     Default: lasttime-app-backend-service
     Description: Backend App Runner Service Name
-  FrontendServiceName:
-    Type: String
-    Default: lasttime-app-frontend-service
-    Description: Frontend App Runner Service Name
 
 Resources:
   TaskListTable:
@@ -46,26 +38,6 @@ Resources:
               - Name: TABLE_NAME
                 Value: !Ref TaskListTable
           ImageIdentifier: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${BackendImageRepoName}'
-          ImageRepositoryType: ECR
-
-  FrontendAppRunnerService:
-    Type: AWS::AppRunner::Service
-    Properties: 
-      InstanceConfiguration: 
-        Cpu: 1024
-        Memory: 2048 
-      ServiceName: !Ref FrontendServiceName
-      SourceConfiguration: 
-        AuthenticationConfiguration:
-          AccessRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
-        ImageRepository:
-          ImageConfiguration:
-            Port: 80
-            RuntimeEnvironmentVariables:
-              - Name: BACKEND_URL
-                Value: !Sub 'https://${BackendAppRunnerService.ServiceUrl}'
-            StartCommand: /start-command.sh
-          ImageIdentifier: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${FrontendImageRepoName}'
           ImageRepositoryType: ECR
   
   BackendInstanceRole:
@@ -100,4 +72,4 @@ Resources:
 
 Outputs:
   ServiceUrl:
-    Value: !GetAtt FrontendAppRunnerService.ServiceUrl
+    Value: !GetAtt BackendAppRunnerService.ServiceUrl
