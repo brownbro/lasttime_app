@@ -25,3 +25,7 @@ deploy-frontend-files:;
 	cp -r frontend/src frontend/build
 	sed -i -e "s|\$$BACKEND_URL|$(BACKEND_URL)|g" frontend/build/assets/js/app.js
 	aws s3 sync frontend/build $(S3_BUCKET)
+
+delete-cfn-stack:;
+	aws cloudformation delete-stack --stack-name $(STACK_NAME)-backend
+	aws cloudformation delete-stack --stack-name $(STACK_NAME)-frontend
