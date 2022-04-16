@@ -8,28 +8,20 @@ services:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
     user: root
-
-  api:
-    depends_on:
-      - dynamodb-local
-    build: ./backend/
-    container_name: api
     ports:
-      - "8080:8080"
-    environment:
-      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
-      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
-      AWS_DEFAULT_REGION: 'ap-northeast-1'
-      AWS_ENDPOINT_URL: 'http://dynamodb-local:8000'
-      TABLE_NAME: 'Tasks'
+      - 8000:8000
+    networks:
+      - lasttime-app-local
 
   frontend:
-    depends_on:
-      - api
     build: ./frontend/
     container_name: frontend
     ports:
       - "80:80"
     environment:
-      BACKEND_URL: http://localhost:8080
+      BACKEND_URL: http://localhost:3000
     command: /start-command.sh
+
+networks:
+  lasttime-app-local:
+    external: true

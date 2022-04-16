@@ -1,10 +1,15 @@
 include .env
 
+init:;
+	docker network create lasttime-app-local
+
 build:; 
 	docker-compose build
+	cd backend/ && sam build
 
 run-local:;
 	docker-compose up -d
+	cd backend && sam local start-api --docker-network lasttime-app-local
 stop-local:;
 	docker-compose down
 

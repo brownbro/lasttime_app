@@ -1,31 +1,18 @@
-import os, datetime, uuid
-
+import os, datetime, uuid, json
 import boto3
 
 from botocore.exceptions import ClientError
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from aws_lambda_powertools.event_handler.api_gateway import APIGatewayRestResolver, CORSConfig, Response
 
-dynamodb = boto3.resource('dynamodb', endpoint_url=os.getenv('AWS_ENDPOINT_URL'))
-table = dynamodb.Table(os.getenv('TABLE_NAME'))
+if os.environ['AWS_SAM_LOCAL']:
+    dynamodb = boto3.resource('dynamodb', endpoint_url='http://dynamodb-local:8000')
+    table = dynamodb.Table("Tasks")
+else:
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(os.getenv('TABLE_NAME'))
 
-app = FastAPI()
-
-origins = [
-    "*",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-class Task(BaseModel):
-    name: str
+cors_config = CORSConfig(allow_origin="http://localhost", allow_headers=['*'], max_age=300)
+app = APIGatewayRestResolver(cors=cors_config)
 
 @app.get("/tasks")
 def get_tasks():
@@ -34,10 +21,12 @@ def get_tasks():
     return {"tasks": tasks}
 
 @app.post("/tasks")
-def post_tasks(task: Task):
+def post_tasks():
+    json_payload = app.current_event.json_body
+    print(json_payload['name'])
     new_task = {
         'id': str(uuid.uuid4()),
-        'name': task.name,
+        'name': json_payload['name'],
         'done_dates': [datetime.datetime.now().isoformat()]
     }
     response = table.put_item(
@@ -47,9 +36,19 @@ def post_tasks(task: Task):
             'done_dates': new_task['done_dates']
         },
     )
-    return {"task": new_task}
+    return Response(
+        status_code=201,
+        content_type="application/json",
+        body=json.dumps({"task": new_task}),
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": True,
+            "Access-Control-Allow-Methods": "*T",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
 
-@app.get("/tasks/{id}")
+@app.get("/tasks/<id>")
 def get_task(id):
     try:
         response = table.get_item(Key={'id': id})
@@ -62,7 +61,7 @@ def get_task(id):
 
     return {'task': response['Item']}
 
-@app.put("/tasks/{id}/done")
+@app.put("/tasks/<id>/done")
 def put_task(id):
     try:
         response = table.get_item(Key={'id': id})
@@ -91,7 +90,7 @@ def put_task(id):
     task = response['Attributes']
     return {'task': task}
 
-@app.delete("/tasks/{id}")
+@app.delete("/tasks/<id>")
 def delete_task(id):
     try:
         response = table.delete_item(
@@ -103,3 +102,6 @@ def delete_task(id):
         raise
 
     return {}
+
+def lambda_handler(event, context):
+    return app.resolve(event, context)
