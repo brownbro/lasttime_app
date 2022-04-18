@@ -4,14 +4,14 @@ import boto3
 from botocore.exceptions import ClientError
 from aws_lambda_powertools.event_handler.api_gateway import APIGatewayRestResolver, CORSConfig, Response
 
-if os.environ['AWS_SAM_LOCAL']:
+if os.environ.get('AWS_SAM_LOCAL'):
     dynamodb = boto3.resource('dynamodb', endpoint_url='http://dynamodb-local:8000')
     table = dynamodb.Table("Tasks")
 else:
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.getenv('TABLE_NAME'))
 
-cors_config = CORSConfig(allow_origin="http://localhost", allow_headers=['*'], max_age=300)
+cors_config = CORSConfig(allow_origin="*", allow_headers=['*'], max_age=300)
 app = APIGatewayRestResolver(cors=cors_config)
 
 @app.get("/tasks")

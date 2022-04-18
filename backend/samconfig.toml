@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lasttime-app-stack-backend"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1gb8b7i5mby12"
+s3_prefix = "lasttime-app-stack-backend"
+region = "ap-northeast-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
