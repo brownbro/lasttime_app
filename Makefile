@@ -14,7 +14,7 @@ stop-local:;
 	docker-compose down
 
 create-frontend-stack:;
-	aws cloudformation deploy --template-file ./aws/cloudformation/frontend-template.yaml --stack-name $(STACK_NAME)-frontend
+	aws cloudformation deploy --template-file ./aws/cloudformation/frontend-template.yaml --stack-name $(STACK_NAME)-frontend --parameter-overrides ACMCertificateArn=$(ACM_CERTIFICATE_ARN) DomainName=$(DOMAIN_NAME) HostedZoneId=$(HOSTED_ZONE_ID)
 
 deploy-backend:;
 	cd backend/ && sam deploy

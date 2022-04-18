@@ -1,13 +1,11 @@
 Parameters:
-  BackendImageRepoName:
+  ACMCertificateArn:
     Type: String
-    Default: lasttime-app/backend:latest
-    Description: Backend Image repository Name and Tag
-  BackendServiceName:
+  DomainName:
     Type: String
-    Default: lasttime-app-backend-service
-    Description: Backend App Runner Service Name
-
+  HostedZoneId:
+    Type: String
+    
 Resources:
   FrontendS3Bucket:
     Type: AWS::S3::Bucket
@@ -29,6 +27,12 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - !Ref DomainName
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ACMCertificateArn
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
         Origins:
         - Id: S3Origin
           DomainName: !GetAtt FrontendS3Bucket.DomainName
@@ -49,6 +53,16 @@ Resources:
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: !Ref AWS::StackName
+
+  R53RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DomainName
+      Type: A
 
 Outputs:
   FrontendBucketName:
