@@ -2,37 +2,44 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>あれから何日？</title>
-
-        <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap-vue.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-            <a class="navbar-brand" href="/">あれから何日？</a>
-        </nav>
-        <div class="container">
-            <div class="pt-3" id="tasks">
-                <task
-                    v-for="t in tasks"
-                    v-bind:key="t.id"
-                    v-bind:task="t"
-                    v-on:done="onDone"
-                    v-on:delete="onDelete"
-                ></task>
-                <div>
-                    <form>
-                        <input type="text" v-model="name"/>
-                        <button class="btn" type="button" @click="onCreate">追加</button>
-                    </form>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">
+                    あれから何日？
+                </h1>
+
+                <div id="tasks">
+                    <div class="block">
+                        <task
+                            v-for="t in tasks"
+                            v-bind:key="t.id"
+                            v-bind:task="t"
+                            v-on:done="onDone"
+                            v-on:delete="onDelete"
+                        ></task>
+                    </div>
+                    
+                    <div class="block">
+                        <form>
+                            <div class="field">
+                                <input class="input" type="text" v-model="name"/>
+                            </div>
+                            <div class="field">
+                                <button class="button is-link is-light" type="button" @click="onCreate">追加</button>
+                            </div>
+                        </form>
+                    </div>    
                 </div>
             </div>
-        </div>
+        </section>
     </body>
 
     <script src="./assets/js/vue.js"></script>
-    <script src="./assets/js/bootstrap-vue.js"></script>
     <script src="./assets/js/app.js"></script>
 </html>

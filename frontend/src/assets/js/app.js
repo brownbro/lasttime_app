@@ -73,11 +73,19 @@ const vm = new Vue({
 Vue.component('task', {
     props: ['task'],
     template: `
-        <div>
-            <h4>{{ task.name }}</h4>
-            <p>{{ task.days_from }}日
-            <button class="btn btn-primary" v-on:click="$emit('done', task.id)">更新</button>
-            <button class="btn btn-danger" v-on:click="$emit('delete', task.id)">削除</button> </p>
+        <div class="columns">
+            <div class="column is-half">
+                <p><strong>{{ task.name }}</strong></p>
+            </div>
+            <div class="column">
+                <p>{{ task.days_from }}日</p>
+            </div>
+            <div class="column">
+                <button class="button is-primary is-fullwidth" v-on:click="$emit('done', task.id)">更新</button>
+            </div>
+            <div class="column">
+                <button class="button is-danger is-fullwidth" v-on:click="$emit('delete', task.id)">削除</button>
+            </div>
         </div>
         `,
 })
