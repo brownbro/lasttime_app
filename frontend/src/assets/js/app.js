@@ -73,19 +73,19 @@ const vm = new Vue({
 Vue.component('task', {
     props: ['task'],
     template: `
-        <div class="columns">
-            <div class="column is-half">
-                <p><strong>{{ task.name }}</strong></p>
+        <div class="card mt-2">
+            <div class="card-content has-text-centered">
+                <p class="title">
+                    {{ task.name }}
+                </p>
+                <p class="subtitle">
+                    {{ task.days_from }}日
+                </p>
             </div>
-            <div class="column">
-                <p>{{ task.days_from }}日</p>
-            </div>
-            <div class="column">
-                <button class="button is-primary is-fullwidth" v-on:click="$emit('done', task.id)">更新</button>
-            </div>
-            <div class="column">
-                <button class="button is-danger is-fullwidth" v-on:click="$emit('delete', task.id)">削除</button>
-            </div>
+            <footer class="card-footer">
+                <button class="button is-primary is-light card-footer-item" v-on:click="$emit('done', task.id)">更新</button>
+                <button class="button is-danger is-light card-footer-item" v-on:click="$emit('delete', task.id)">削除</button>
+            </footer>
         </div>
         `,
 })
