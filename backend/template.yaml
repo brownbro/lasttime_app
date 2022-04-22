@@ -6,6 +6,7 @@ Description: SAM Template for backend
 Globals:
   Function:
     Timeout: 3
+    MemorySize: 320
   Api:
     Cors:
       AllowOrigin: "'*'"
