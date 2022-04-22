@@ -20,6 +20,8 @@ services:
       - "80:80"
     environment:
       BACKEND_URL: http://localhost:3000
+    volumes:
+      - "./frontend/src:/frontend"
     command: /start-command.sh
 
 networks:
